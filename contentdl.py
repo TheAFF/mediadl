@@ -14,6 +14,8 @@ def download_video():
     try:
         subprocess.run([
             "yt-dlp.exe", 
+            "-f", 
+            "bestvideo[ext=mp4]+bestaudio[ext=m4a]/best[ext=mp4]/best", 
             "--output", 
             "./downloads/videos/%(title)s.%(ext)s", 
             url
