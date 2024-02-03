@@ -11,6 +11,9 @@ def create_folders():
 
 def download_video():
     url = url_entry.get()
+    if not url:
+        status_var.set("Input valid URL!")
+        return
     try:
         subprocess.run([
             "yt-dlp.exe", 
@@ -24,8 +27,13 @@ def download_video():
     except Exception as e:
         status_var.set(f"Error: {str(e)}")
 
+    url_entry.delete(0, 'end')
+
 def download_audio():
     url = url_entry.get()
+    if not url:
+        status_var.set("Input valid URL!")
+        return
     try:
         subprocess.run([
             "yt-dlp.exe",
@@ -37,6 +45,16 @@ def download_audio():
             url
         ])
         status_var.set("Audio Download Complete!")
+    except Exception as e:
+        status_var.set(f"Error: {str(e)}")
+        
+    url_entry.delete(0, 'end')
+
+def open_directory():
+    downloads_directory = os.path.join(os.getcwd(), "downloads")
+    try:
+        subprocess.Popen(["explorer", downloads_directory], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        status_var.set("File Explorer Opened!")
     except Exception as e:
         status_var.set(f"Error: {str(e)}")
 
@@ -59,10 +77,13 @@ download_video_button.pack(pady=10)
 download_audio_button = Button(app, text="Download Audio", command=download_audio)
 download_audio_button.pack(pady=10)
 
+open_directory_button = Button(app, text="Open Downloads Folder", command=open_directory)
+open_directory_button.pack(pady=10)
+
 status_var = StringVar()
 status_label = Label(app, textvariable=status_var)
 status_label.pack(pady=10)
 
-app.geometry("300x250")
+app.geometry("350x300")
 
 app.mainloop()
